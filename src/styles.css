@@ -1,4 +1,13 @@
-/* Tailwind custom styles (optional) */
+/* Tailwind utilities for additional customization */
 body {
   font-family: 'Inter', sans-serif;
+}
+
+#text-display {
+  height: 120px;
+  overflow-y: hidden;
+}
+
+.hidden {
+  display: none;
 }
