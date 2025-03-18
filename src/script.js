@@ -1,10 +1,11 @@
 let timer;
 let countdown;
-let timeRemaining = 30; // 30 seconds timer
+let timeRemaining = 30; // 30 seconds for the game
 let wordIndex = 0;
 let typedCharacters = 0;
 let mistakes = 0;
 let wordsTyped = 0;
+let gameStarted = false;
 
 const words = [
   "accuracy", "algorithm", "backend", "binary", "browser", "circuit", "compile",
@@ -25,20 +26,25 @@ const wpmDisplay = document.getElementById("wpm");
 const accuracyDisplay = document.getElementById("accuracy");
 const ctx = document.getElementById("wpm-chart").getContext("2d");
 
-// Automatically start the game on page load
+// Initialize the game when the page loads
 window.onload = () => {
-  startGame();
+  shuffleWords();
+  displayWords();
+
+  document.body.addEventListener("keydown", (e) => {
+    if (!gameStarted && e.key !== "Shift" && e.key !== "CapsLock") {
+      startGame(); // Start the game as soon as the user types
+    }
+
+    handleTyping(e);
+  });
 };
 
 // Function to start the game
 const startGame = () => {
-  resetGame();
-  shuffleWords();
-  displayWords();
+  gameStarted = true;
 
-  document.body.addEventListener("keydown", handleTyping);
-
-  // Start timer countdown
+  // Start the countdown timer
   countdown = setInterval(() => {
     timeRemaining--;
     timerDisplay.textContent = `${timeRemaining}s`;
@@ -50,8 +56,10 @@ const startGame = () => {
   }, 1000);
 };
 
-// Function to handle user input
+// Function to handle user typing
 const handleTyping = (e) => {
+  if (!gameStarted) return; // Don't respond to typing until the game starts
+
   const displayedWords = textDisplay.textContent.split(" ");
   const currentWord = displayedWords[wordIndex];
 
@@ -65,14 +73,14 @@ const handleTyping = (e) => {
       typedCharacters = 0;
     }
 
-    // Update text display
+    // Update the text display
     updateTextDisplay(displayedWords);
   } else if (e.key !== "Shift" && e.key !== "CapsLock") {
     mistakes++;
   }
 };
 
-// Function to display words in a static container
+// Function to display words statically in the container
 const displayWords = () => {
   textDisplay.innerHTML = words.join(" ");
 };
@@ -80,12 +88,12 @@ const displayWords = () => {
 // Function to reset the game
 const resetGame = () => {
   clearInterval(countdown);
-  clearInterval(timer);
   timeRemaining = 30;
   wordIndex = 0;
   typedCharacters = 0;
   mistakes = 0;
   wordsTyped = 0;
+  gameStarted = false;
   resultsContainer.classList.add("hidden");
   timerDisplay.textContent = "30s";
 };
@@ -98,7 +106,7 @@ const shuffleWords = () => {
   }
 };
 
-// Function to update the word display with correct and incorrect highlights
+// Function to update word display with highlights
 const updateTextDisplay = (displayedWords) => {
   let formattedWords = "";
 
@@ -131,7 +139,7 @@ const endGame = () => {
   resultsContainer.classList.remove("hidden");
 };
 
-// Function to display Chart.js bar chart for results
+// Function to display a Chart.js bar chart
 const displayResultsChart = (wpm, mistakes) => {
   new Chart(ctx, {
     type: "bar",
