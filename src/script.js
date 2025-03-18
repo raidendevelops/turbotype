@@ -24,6 +24,7 @@ const timerDisplay = document.getElementById("timer");
 const resultsContainer = document.getElementById("results-container");
 const wpmDisplay = document.getElementById("wpm");
 const accuracyDisplay = document.getElementById("accuracy");
+const newGameButton = document.getElementById("new-game"); // Button for starting a new game
 const ctx = document.getElementById("wpm-chart").getContext("2d");
 
 // Initialize the game when the page loads
@@ -37,6 +38,12 @@ window.onload = () => {
     }
 
     handleTyping(e);
+  });
+
+  newGameButton.addEventListener("click", () => {
+    resetGame();
+    shuffleWords();
+    displayWords();
   });
 };
 
@@ -82,12 +89,7 @@ const handleTyping = (e) => {
 
 // Function to display words in a multiline container
 const displayWords = () => {
-  textDisplay.innerHTML = words.map((word, index) => {
-    if (index === 0) {
-      return `<span>${word}</span>`;
-    }
-    return ` ${word}`;
-  }).join("");
+  textDisplay.innerHTML = words.map((word) => `<span>${word}</span>`).join(" ");
 };
 
 // Function to reset the game
