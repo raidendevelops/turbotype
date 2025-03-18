@@ -1,0 +1,25 @@
+/* Theme colors */
+.theme-default {
+  --bg-color: #1a1a1a;
+  --accent-color: #3b82f6;
+}
+
+.theme-purple {
+  --bg-color: #2b1d3f;
+  --accent-color: #a855f7;
+}
+
+.theme-red {
+  --bg-color: #3f1d1d;
+  --accent-color: #f87171;
+}
+
+.theme-blue {
+  --bg-color: #1d3f3f;
+  --accent-color: #60a5fa;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--accent-color);
+}
