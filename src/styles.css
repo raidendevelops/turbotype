@@ -11,3 +11,18 @@ body {
 .hidden {
   display: none;
 }
+
+
+#text-display {
+  width: 90%;
+  max-width: 800px;
+  height: 200px;
+  margin: auto;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+  line-height: 2; /* Adjust line spacing */
+  white-space: normal; /* Allow wrapping */
+}
