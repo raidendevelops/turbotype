@@ -1,25 +1,34 @@
 let timer;
-let timeElapsed = 0;
+let countdown;
+let timeRemaining = 30; // 30 seconds timer
 let wordIndex = 0;
 let typedCharacters = 0;
 let mistakes = 0;
 let wordsTyped = 0;
 
 const words = [
-  "developer", "javascript", "frontend", "backend", "speed",
-  "accuracy", "typing", "monkeytype", "framework", "react"
+  "accuracy", "algorithm", "backend", "binary", "browser", "circuit", "compile",
+  "compute", "condition", "console", "constant", "data", "debug", "developer",
+  "frontend", "function", "hardware", "interface", "iteration", "keyboard",
+  "language", "library", "loop", "network", "optimize", "output", "parameter",
+  "react", "repository", "runtime", "server", "software", "syntax", "system",
+  "terminal", "variable", "virtual", "visual", "webpack", "wireless", "keyboard",
+  "session", "typing", "speed", "progress", "framework", "style", "container",
+  "design", "render", "performance", "interaction", "build", "deploy", "engineer"
 ];
 
 // DOM elements
 const textDisplay = document.getElementById("text-display");
-const startButton = document.getElementById("start-game");
-const themeSelector = document.getElementById("theme-selector");
+const timerDisplay = document.getElementById("timer");
 const resultsContainer = document.getElementById("results-container");
 const wpmDisplay = document.getElementById("wpm");
 const accuracyDisplay = document.getElementById("accuracy");
 const ctx = document.getElementById("wpm-chart").getContext("2d");
 
-let typedWordData; // To store WPM and mistakes for chart
+// Automatically start the game on page load
+window.onload = () => {
+  startGame();
+};
 
 // Function to start the game
 const startGame = () => {
@@ -29,9 +38,15 @@ const startGame = () => {
 
   document.body.addEventListener("keydown", handleTyping);
 
-  // Start timer
-  timer = setInterval(() => {
-    timeElapsed++;
+  // Start timer countdown
+  countdown = setInterval(() => {
+    timeRemaining--;
+    timerDisplay.textContent = `${timeRemaining}s`;
+
+    if (timeRemaining <= 0) {
+      clearInterval(countdown);
+      endGame();
+    }
   }, 1000);
 };
 
@@ -50,31 +65,29 @@ const handleTyping = (e) => {
       typedCharacters = 0;
     }
 
-    // End game when all words are typed
-    if (wordIndex === displayedWords.length) {
-      endGame();
-    }
-  } else {
+    // Update text display
+    updateTextDisplay(displayedWords);
+  } else if (e.key !== "Shift" && e.key !== "CapsLock") {
     mistakes++;
   }
-
-  updateTextDisplay(displayedWords);
 };
 
-// Function to display words dynamically
+// Function to display words in a static container
 const displayWords = () => {
-  textDisplay.textContent = words.join(" ");
+  textDisplay.innerHTML = words.join(" ");
 };
 
 // Function to reset the game
 const resetGame = () => {
+  clearInterval(countdown);
   clearInterval(timer);
-  timeElapsed = 0;
+  timeRemaining = 30;
   wordIndex = 0;
   typedCharacters = 0;
   mistakes = 0;
   wordsTyped = 0;
   resultsContainer.classList.add("hidden");
+  timerDisplay.textContent = "30s";
 };
 
 // Function to shuffle words
@@ -85,7 +98,7 @@ const shuffleWords = () => {
   }
 };
 
-// Function to update word display with typed highlights
+// Function to update the word display with correct and incorrect highlights
 const updateTextDisplay = (displayedWords) => {
   let formattedWords = "";
 
@@ -104,10 +117,10 @@ const updateTextDisplay = (displayedWords) => {
 
 // Function to end the game
 const endGame = () => {
-  clearInterval(timer);
+  clearInterval(countdown);
   document.body.removeEventListener("keydown", handleTyping);
 
-  const wpm = Math.round((wordsTyped / timeElapsed) * 60);
+  const wpm = Math.round((wordsTyped / 30) * 60); // Words per minute
   const accuracy = Math.round(((typedCharacters - mistakes) / typedCharacters) * 100);
 
   wpmDisplay.textContent = wpm;
@@ -118,7 +131,7 @@ const endGame = () => {
   resultsContainer.classList.remove("hidden");
 };
 
-// Function to display a Chart.js bar chart
+// Function to display Chart.js bar chart for results
 const displayResultsChart = (wpm, mistakes) => {
   new Chart(ctx, {
     type: "bar",
@@ -139,11 +152,3 @@ const displayResultsChart = (wpm, mistakes) => {
     },
   });
 };
-
-// Theme selector
-themeSelector.addEventListener("change", (e) => {
-  document.body.className = e.target.value;
-});
-
-// Start button
-startButton.addEventListener("click", startGame);
