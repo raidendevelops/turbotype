@@ -1,60 +1,82 @@
-let timer;
-let timeElapsed = 0;
-let isGameRunning = false;
-let wordDisplay;
+import Chart from 'chart.js/auto';
 
-// Mock word list
-const words = [
-  "javascript", "react", "tailwind", "monkeytype", 
-  "developer", "frontend", "backend", "coding"
-];
+const words = ["developer", "monkeytype", "turbo", "javascript", "speed", "accuracy", "typing", "frontend", "backend"];
+let timer, timeElapsed = 0, typedWords = 0, mistakes = 0;
+let wordIndex = 0;
 
+// DOM elements
+const textDisplay = document.getElementById("text-display");
+const startButton = document.getElementById("start-game");
+const themeSelector = document.getElementById("theme-selector");
+const resultsContainer = document.getElementById("results-container");
+const wpmDisplay = document.getElementById("wpm");
+const accuracyDisplay = document.getElementById("accuracy");
+
+// Game logic
 const startGame = () => {
-  if (isGameRunning) return;
-
-  isGameRunning = true;
+  wordIndex = 0;
+  typedWords = 0;
+  mistakes = 0;
   timeElapsed = 0;
-  document.getElementById("timer").textContent = `Time: 0s`;
 
-  // Generate random words using Typed.js
-  const randomText = words.sort(() => Math.random() - 0.5).slice(0, 50).join(" ");
-  wordDisplay = new Typed("#text-display", {
-    strings: [randomText],
-    typeSpeed: 50,
-    showCursor: false,
-  });
+  // Shuffle words and display them
+  const shuffledWords = words.sort(() => Math.random() - 0.5).join(" ");
+  textDisplay.textContent = shuffledWords;
 
   // Start timer
-  timer = setInterval(() => {
-    timeElapsed++;
-    document.getElementById("timer").textContent = `Time: ${timeElapsed}s`;
-  }, 1000);
+  timer = setInterval(() => timeElapsed++, 1000);
 
-  // Event listener for input comparison
-  const inputField = document.getElementById("text-input");
-  inputField.value = "";
-  inputField.focus();
-  inputField.addEventListener("input", checkTextMatch);
+  document.body.addEventListener("keydown", handleTyping);
 };
 
-const checkTextMatch = () => {
-  const input = document.getElementById("text-input").value;
-  const displayedText = document.getElementById("text-display").textContent;
+const handleTyping = (e) => {
+  const displayedText = textDisplay.textContent.split(" ");
+  const currentWord = displayedText[wordIndex];
 
-  if (displayedText.startsWith(input)) {
-    document.getElementById("text-input").classList.add("border-green-500");
-    document.getElementById("text-input").classList.remove("border-red-500");
-
-    // Check if complete
-    if (input === displayedText) {
-      clearInterval(timer);
-      isGameRunning = false;
-      alert(`Well done! Time: ${timeElapsed}s`);
+  // Check character match
+  if (e.key === currentWord.charAt(typedWords)) {
+    typedWords++;
+    if (typedWords === currentWord.length) {
+      wordIndex++;
+      typedWords = 0;
     }
   } else {
-    document.getElementById("text-input").classList.add("border-red-500");
-    document.getElementById("text-input").classList.remove("border-green-500");
+    mistakes++;
   }
+
+  if (wordIndex >= displayedText.length) endGame(); // End game
 };
 
-document.getElementById("start-game").addEventListener("click", startGame);
+const endGame = () => {
+  clearInterval(timer);
+  const wpm = Math.round((wordIndex / timeElapsed) * 60);
+  const accuracy = Math.round(((wordIndex - mistakes) / wordIndex) * 100);
+
+  wpmDisplay.textContent = wpm;
+  accuracyDisplay.textContent = accuracy + "%";
+
+  displayChart(wpm, mistakes);
+  resultsContainer.classList.remove("hidden");
+};
+
+const displayChart = (wpm, mistakes) => {
+  const ctx = document.getElementById("wpm-chart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["WPM", "Mistakes"],
+      datasets: [{
+        data: [wpm, mistakes],
+        backgroundColor: ["#4caf50", "#f44336"]
+      }]
+    }
+  });
+};
+
+// Theme-switcher
+themeSelector.addEventListener("change", (e) => {
+  document.body.className = e.target.value;
+});
+
+// Start button event listener
+startButton.addEventListener("click", startGame);
