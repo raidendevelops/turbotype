@@ -1,29 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>turbotype</title>
+  <title>Turbotype</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="./src/styles.css">
+  <link rel="stylesheet" href="./src/themes.css">
 </head>
-<body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center">
+<body class="theme-default bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center">
   <header class="mb-6 text-center">
-    <h1 class="text-4xl font-bold">Typing Challenge</h1>
-    <p class="text-gray-400">How fast can you type?</p>
+    <h1 class="text-4xl font-bold">Turbotype</h1>
+    <p class="text-gray-400">Test your typing speed and accuracy.</p>
   </header>
 
-  <div id="game-container" class="w-4/5 max-w-xl p-4 bg-gray-900 rounded-lg shadow-lg">
-    <div id="text-display" class="text-2xl text-gray-300 mb-4"></div>
-    <textarea id="text-input" rows="4" class="w-full p-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Start typing..."></textarea>
-    <div class="mt-4 flex justify-between items-center">
-      <button id="start-game" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">Start</button>
-      <div id="timer" class="text-gray-400">Time: 0s</div>
-    </div>
+  <!-- Word display -->
+  <div id="text-display" class="text-2xl text-gray-300 mb-4 w-4/5 max-w-xl overflow-hidden whitespace-nowrap"></div>
+
+  <!-- Results -->
+  <div id="results-container" class="hidden bg-gray-900 p-4 rounded-lg w-4/5 max-w-xl">
+    <p>WPM: <span id="wpm">0</span></p>
+    <p>Accuracy: <span id="accuracy">0%</span></p>
+    <canvas id="wpm-chart" class="mt-4"></canvas>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <!-- Start/Theme buttons -->
+  <div class="mt-4 flex justify-between items-center w-4/5 max-w-xl">
+    <button id="start-game" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">Start</button>
+    <select id="theme-selector" class="px-4 py-2 bg-gray-700 text-white rounded">
+      <option value="theme-default">Default</option>
+      <option value="theme-purple">Purple</option>
+      <option value="theme-red">Red</option>
+      <option value="theme-blue">Blue</option>
+    </select>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
   <script src="./src/script.js" defer></script>
 </body>
 </html>
