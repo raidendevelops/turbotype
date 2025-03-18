@@ -80,9 +80,14 @@ const handleTyping = (e) => {
   }
 };
 
-// Function to display words statically in the container
+// Function to display words in a multiline container
 const displayWords = () => {
-  textDisplay.innerHTML = words.join(" ");
+  textDisplay.innerHTML = words.map((word, index) => {
+    if (index === 0) {
+      return `<span>${word}</span>`;
+    }
+    return ` ${word}`;
+  }).join("");
 };
 
 // Function to reset the game
@@ -106,17 +111,17 @@ const shuffleWords = () => {
   }
 };
 
-// Function to update word display with highlights
+// Function to update the word display with highlights
 const updateTextDisplay = (displayedWords) => {
   let formattedWords = "";
 
   displayedWords.forEach((word, index) => {
     if (index < wordIndex) {
-      formattedWords += `<span class="text-green-500">${word} </span>`;
+      formattedWords += `<span class="text-green-500">${word}</span> `;
     } else if (index === wordIndex) {
-      formattedWords += `<span class="text-blue-500">${word.slice(0, typedCharacters)}</span><span class="text-gray-400">${word.slice(typedCharacters)} </span>`;
+      formattedWords += `<span class="text-blue-500">${word.slice(0, typedCharacters)}</span><span class="text-gray-400">${word.slice(typedCharacters)}</span> `;
     } else {
-      formattedWords += `<span class="text-gray-300">${word} </span>`;
+      formattedWords += `<span class="text-gray-300">${word}</span> `;
     }
   });
 
@@ -139,7 +144,7 @@ const endGame = () => {
   resultsContainer.classList.remove("hidden");
 };
 
-// Function to display a Chart.js bar chart
+// Function to display Chart.js bar chart for results
 const displayResultsChart = (wpm, mistakes) => {
   new Chart(ctx, {
     type: "bar",
