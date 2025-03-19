@@ -3,46 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turbotype</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>turbotype</title>
   <link rel="stylesheet" href="./src/styles.css">
-  <link rel="stylesheet" href="./src/themes.css">
 </head>
-<body class="theme-default bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center">
-  <header class="mb-6 text-center">
-    <h1 class="text-4xl font-bold">Turbotype</h1>
-    <p class="text-gray-400">Test your typing speed and accuracy.</p>
-    <div id="timer" class="text-xl text-gray-300 mb-4">30s</div>
+<body class="theme-oled bg-black text-white min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="w-full flex justify-between items-center px-8 py-4 bg-gray-900 shadow-md">
+    <h1 class="text-3xl font-bold tracking-wide">turbotype</h1>
+    <div>
+      <select id="theme-selector" class="px-4 py-2 bg-gray-800 text-white rounded-lg">
+        <option value="theme-oled" selected>OLED</option>
+        <option value="theme-default">Default</option>
+        <option value="theme-purple">Purple</option>
+        <option value="theme-red">Red</option>
+        <option value="theme-blue">Blue</option>
+      </select>
+    </div>
   </header>
 
-  <!-- Word display -->
-  <div id="text-display" class="text-2xl text-gray-300 mb-4 w-4/5 max-w-xl overflow-hidden whitespace-nowrap"></div>
+  <!-- Main Content -->
+  <main class="flex flex-col items-center justify-center flex-grow w-full relative">
+    <!-- Word Display -->
+    <div id="text-display" class="text-3xl font-mono text-gray-300 w-11/12 max-w-5xl p-6 bg-black rounded-lg shadow-lg text-left relative overflow-hidden"></div>
 
-  <!-- Results -->
-  <div id="results-container" class="hidden bg-gray-900 p-4 rounded-lg w-4/5 max-w-xl">
-    <p>WPM: <span id="wpm">0</span></p>
-    <p>Accuracy: <span id="accuracy">0%</span></p>
-    <canvas id="wpm-chart" class="mt-4"></canvas>
-  </div>
+    <!-- Keyboard Visualization -->
+    <div id="keyboard-visualization" class="mt-6 grid gap-2 text-center text-gray-400"></div>
+  </main>
 
-  <div class="mt-4">
-  <button id="new-game" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700">New Game</button>
-</div>
+  <!-- Footer -->
+  <footer class="w-full text-center py-4 bg-gray-900 text-gray-500 text-sm">
+    <p>Made with ❤️ by raiden</p>
+  </footer>
 
-
-  <!-- Start/Theme buttons -->
-  <div class="mt-4 flex justify-between items-center w-4/5 max-w-xl">
-    <button id="start-game" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">Start</button>
-    <select id="theme-selector" class="px-4 py-2 bg-gray-700 text-white rounded">
-      <option value="theme-default">Default</option>
-      <option value="theme-purple">Purple</option>
-      <option value="theme-red">Red</option>
-      <option value="theme-blue">Blue</option>
-    </select>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
   <script src="./src/script.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
