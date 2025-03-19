@@ -1,28 +1,156 @@
-/* Tailwind utilities for additional customization */
+/* General body styling */
 body {
   font-family: 'Inter', sans-serif;
 }
 
+/* Word display container */
 #text-display {
-  height: 120px;
-  overflow-y: hidden;
+  height: 40vh; /* Adjust height for better focus */
+  overflow-y: hidden; /* Hide overflowing text */
+  line-height: 2.5; /* Adjust line spacing for multiple lines */
+  white-space: normal; /* Allow wrapping to multiple lines */
+  word-wrap: break-word;
+  user-select: none;
+  background-color: #000000; /* Match OLED theme */
+  color: #ffffff; /* Ensure text is visible */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Cursor indicator for smooth movement */
+#cursor-indicator {
+  position: absolute;
+  width: 2px; /* Match the width of the blinking cursor */
+  height: 1.5em; /* Match the height of the text */
+  background-color: #3b82f6; /* Blue color for the cursor */
+  transition: transform 0.1s ease; /* Smooth movement */
+  z-index: 10;
+}
+
+/* OLED-friendly theme */
+.theme-oled {
+  background-color: #000000; /* Pure black for OLED displays */
+  color: #ffffff; /* White text for contrast */
+}
+
+#text-display span {
+  padding: 0 0.15rem; /* Adjust spacing between words */
+}
+
+#text-display span.correct {
+  color: #22c55e; /* Green for correct characters */
+}
+
+#text-display span.incorrect {
+  color: #ef4444; /* Red for incorrect characters */
+}
+
+#text-display span.current {
+  text-decoration: underline;
+  color: #3b82f6; /* Blue for the current word */
+}
+
+/* Cursor blink effect */
+.cursor-blink {
+  border-right: 2px solid #3b82f6;
+  animation: blink 1s step-end infinite;
+  transition: all 0.2s ease; /* Smooth movement for the cursor */
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+
+/* Smooth transitions for hover effects */
+button, select {
+  transition: all 0.3s ease;
+}
+
+#results-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* Footer styling */
+footer {
+  background-color: #1e1e1e;
+  color: #9ca3af;
+}
+
+header {
+  background-color: #121212; /* Dark gray for OLED theme */
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
+.text-red-500 {
+  color: #ef4444; /* Red for incorrect characters */
+  transition: color 0.2s ease; /* Smooth color transition */
+}
 
-#text-display {
-  width: 90%;
-  max-width: 800px;
-  height: 200px;
-  margin: auto;
-  padding: 20px;
-  background-color: #1e1e1e;
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: left;
-  line-height: 2; /* Adjust line spacing */
-  white-space: normal; /* Allow wrapping */
+/* Correct character styling */
+.text-gray-500 {
+  color: #6b7280; /* Gray for correct characters */
+  transition: color 0.2s ease; /* Smooth color transition */
+}
+
+/* Remaining character styling */
+.text-gray-400 {
+  color: #9ca3af; /* Light gray for remaining characters */
+}
+
+#live-stats {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #ffffff;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+/* Keyboard visualization */
+#keyboard-visualization {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr); /* Adjust for QWERTY layout */
+  gap: 0.5rem;
+  text-align: center;
+  width: 80%;
+}
+
+#keyboard-visualization .key {
+  padding: 0.5rem;
+  background-color: #1e293b;
+  border-radius: 6px;
+  color: #9ca3af;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#keyboard-visualization .key.active {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+/* Spacebar styling */
+#keyboard-visualization .key.spacebar {
+  grid-column: span 7; /* Make the spacebar span multiple columns */
 }
